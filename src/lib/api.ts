@@ -11,6 +11,7 @@ export async function fetchLatestRates(from: string, to: string) {
 export async function fetchHistoricalRates(from: string, to: string, days: number = 365) {
   const endDate = new Date();
   const startDate = new Date();
+  // Fixed syntax error here:
   startDate.setDate(endDate.getDate() - days);
   
   const format = (d: Date) => d.toISOString().split('T')[0];
