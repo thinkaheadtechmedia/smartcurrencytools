@@ -10,7 +10,7 @@ export default function CurrenciesIndex() {
         {CURRENCIES.map(currency => (
           <Link key={currency.code} href={`/currencies/${currency.code.toLowerCase()}`} className="bg-white p-6 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition-all">
             <div className="flex items-center gap-4 mb-2">
-              <span className="text-4xl">{currency.flag}</span>
+              <CurrencyFlag code={currency.code} className="!w-12 !h-8" />
               <div>
                 <h2 className="font-display text-xl font-bold text-slate-900">{currency.code}</h2>
                 <p className="text-sm text-slate-500">{currency.name}</p>
