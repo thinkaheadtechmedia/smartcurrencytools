@@ -18,8 +18,9 @@ export async function generateStaticParams() {
   return pairs;
 }
 
-export async function generateMetadata({ params }: { params: { pair: string } }) {
-  const parts = params.pair.split('-to-');
+export async function generateMetadata({ params }: { params: Promise<{ pair: string }> }) {
+  const { pair } = await params;
+  const parts = pair.split('-to-');
   if (parts.length !== 2) return {};
   const from = getCurrency(parts[0]);
   const to = getCurrency(parts[1]);
@@ -28,12 +29,13 @@ export async function generateMetadata({ params }: { params: { pair: string } })
   return {
     title: `${from.code} to ${to.code} Exchange Rate | Convert ${from.name} to ${to.name}`,
     description: `Live exchange rate for ${from.name} (${from.code}) to ${to.name} (${to.code}). Convert ${from.code} to ${to.code} with real-time charts and historical data.`,
-    alternates: { canonical: `https://smartcurrencytools.com/convert/${params.pair}` }
+    alternates: { canonical: `https://smartcurrencytools.com/convert/${pair}` }
   };
 }
 
-export default async function PairPage({ params }: { params: { pair: string } }) {
-  const parts = params.pair.split('-to-');
+export default async function PairPage({ params }: { params: Promise<{ pair: string }> }) {
+  const { pair } = await params;
+  const parts = pair.split('-to-');
   if (parts.length !== 2) return notFound();
   
   const from = getCurrency(parts[0]);
