@@ -7,9 +7,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
-  title: "Smart Currency Tools | Live Exchange Rates & Currency Converter",
-  description: "Convert 170+ world currencies with live exchange rates, historical charts, and rate alerts. Fast, accurate, and free currency conversion tools.",
-  metadataBase: new URL("https://smartcurrencytools.com"),
+  title: "Smart Currency Tools | Live Exchange Rates & Converter",
+  description: "Convert 170+ world currencies with live exchange rates, historical charts, and rate alerts.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +23,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
               <Link href="/" className="hover:text-emerald-500 transition-colors">Converter</Link>
               <Link href="/currencies" className="hover:text-emerald-500 transition-colors">Currencies</Link>
-              <Link href="/blog" className="hover:text-emerald-500 transition-colors">Blog</Link>
               <Link href="/about" className="hover:text-emerald-500 transition-colors">About</Link>
             </div>
           </nav>
@@ -45,7 +43,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <h3 className="text-white font-display font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/about" className="hover:text-emerald-400">About</Link></li>
-                <li><Link href="/blog" className="hover:text-emerald-400">Blog</Link></li>
               </ul>
             </div>
             <div>
@@ -59,9 +56,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <h3 className="text-white font-display font-semibold mb-4">Data Source</h3>
               <p className="text-sm">Rates provided by Frankfurter.app. Updated hourly.</p>
             </div>
-          </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
-            © {new Date().getFullYear()} SmartCurrencyTools. All rights reserved.
           </div>
         </footer>
       </body>

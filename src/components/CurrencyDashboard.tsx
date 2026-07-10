@@ -36,7 +36,6 @@ export default function CurrencyDashboard({
       setLoading(false);
     };
     
-    // Only fetch if the pair actually changed from initial load
     if (from !== initialFrom || to !== initialTo || period !== 7) {
         updateChart();
     }

@@ -1,6 +1,6 @@
 'use client';
 
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Props {
   data: any;
@@ -42,11 +42,7 @@ export default function HistoricalChart({ data }: Props) {
             boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
           }}
           labelStyle={{ color: '#64748b', fontSize: '12px', marginBottom: '4px' }}
-          formatter={(value: any) => {
-            if (value === undefined || value === null) return ['', 'Rate'];
-            const num = Number(value);
-            return [isNaN(num) ? '' : num.toFixed(4), 'Rate'];
-          }}
+          formatter={(value) => [Number(value ?? 0).toFixed(4), 'Rate']}
         />
         <Area 
           type="monotone" 

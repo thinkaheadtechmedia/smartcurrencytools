@@ -18,27 +18,8 @@ const popularPairs = [
 export default async function Home() {
   const initialHistorical = await fetchHistoricalRates('USD', 'EUR', 7);
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How often are exchange rates updated?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Our exchange rates are sourced directly from the European Central Bank via Frankfurter.app and are updated every hour to ensure accuracy." }
-      },
-      {
-        "@type": "Question",
-        "name": "Is this currency converter free to use?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes, SmartCurrencyTools is 100% free for personal and commercial use. There are no hidden fees or limits on conversions." }
-      }
-    ]
-  };
-
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white to-slate-50 py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -154,22 +135,6 @@ export default async function Home() {
             ))}
           </div>
         </section>
-
-        {/* FAQ Section */}
-        <section className="max-w-3xl mx-auto">
-          <h2 className="font-display text-3xl font-bold text-center mb-8 text-slate-900">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-lg mb-2 text-slate-900">How often are rates updated?</h3>
-              <p className="text-slate-600">Our exchange rates are sourced from the European Central Bank and are updated every hour on our platform.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-              <h3 className="font-semibold text-lg mb-2 text-slate-900">Is this currency converter free?</h3>
-              <p className="text-slate-600">Yes, SmartCurrencyTools is 100% free for personal and commercial use. There are no hidden fees or limits.</p>
-            </div>
-          </div>
-        </section>
-
       </div>
     </div>
   );

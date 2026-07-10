@@ -36,7 +36,7 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+    <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
         
         {/* From Input */}
@@ -47,7 +47,7 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
               type="number"
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
-              className="w-full bg-transparent text-2xl font-bold text-slate-900 outline-none focus:outline-none placeholder:text-slate-300"
+              className="w-full bg-transparent text-2xl font-bold text-slate-900 outline-none placeholder:text-slate-300"
               placeholder="0.00"
             />
             <select 
