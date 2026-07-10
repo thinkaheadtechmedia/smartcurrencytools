@@ -16,16 +16,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans bg-slate-50 text-slate-900 antialiased">
-        <header className="bg-slate-900 text-white sticky top-0 z-50 shadow-sm">
-          <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <Link href="/" className="font-display text-xl font-bold text-white tracking-tight">
-              Smart<span className="text-emerald-400">Currency</span>
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-50 backdrop-blur-md bg-white/90">
+          <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <Link href="/" className="font-display text-xl font-bold tracking-tight text-slate-900">
+              Smart<span className="text-emerald-500">Currency</span>
             </Link>
-            <div className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
-              <Link href="/" className="hover:text-emerald-400 transition-colors">Converter</Link>
-              <Link href="/currencies" className="hover:text-emerald-400 transition-colors">Currencies</Link>
-              <Link href="/blog" className="hover:text-emerald-400 transition-colors">Blog</Link>
-              <Link href="/about" className="hover:text-emerald-400 transition-colors">About</Link>
+            <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+              <Link href="/" className="hover:text-emerald-500 transition-colors">Converter</Link>
+              <Link href="/currencies" className="hover:text-emerald-500 transition-colors">Currencies</Link>
+              <Link href="/blog" className="hover:text-emerald-500 transition-colors">Blog</Link>
+              <Link href="/about" className="hover:text-emerald-500 transition-colors">About</Link>
             </div>
           </nav>
         </header>
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="min-h-[calc(100vh-4rem)]">{children}</main>
 
         <footer className="bg-slate-900 text-slate-400 py-12 mt-20">
-          <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-white font-display font-semibold mb-4">Tools</h3>
               <ul className="space-y-2 text-sm">
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <p className="text-sm">Rates provided by Frankfurter.app. Updated hourly.</p>
             </div>
           </div>
-          <div className="max-w-6xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
             © {new Date().getFullYear()} SmartCurrencyTools. All rights reserved.
           </div>
         </footer>

@@ -36,59 +36,84 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-end gap-2">
-        <div className="flex-1">
-          <label className="block text-xs font-medium text-slate-500 mb-1">Amount</label>
-          <input 
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            className="w-full p-4 border border-slate-200 rounded-xl text-2xl font-bold focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
-          />
-        </div>
-        <select 
-          value={from} 
-          onChange={(e) => {
-            setFrom(e.target.value);
-            if (onPairChange) onPairChange(e.target.value, to);
-          }}
-          className="p-4 border border-slate-200 rounded-xl bg-slate-50 font-semibold focus:ring-2 focus:ring-emerald-500 outline-none"
-        >
-          {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
-        </select>
-      </div>
-
-      <div className="flex justify-center -my-2 relative z-10">
-        <button 
-          onClick={handleSwap} 
-          className="p-3 bg-white border border-slate-200 rounded-full hover:bg-emerald-50 hover:border-emerald-500 transition-all hover:rotate-180 duration-300 shadow-sm"
-          aria-label="Swap currencies"
-        >
-          <ArrowUpDown className="w-5 h-5 text-emerald-600" />
-        </button>
-      </div>
-
-      <div className="flex items-end gap-2">
-        <div className="flex-1 relative">
-          <label className="block text-xs font-medium text-slate-500 mb-1">Converted Amount</label>
-          <div className="w-full p-4 border border-slate-200 rounded-xl bg-slate-50 flex justify-between items-center">
-            <span className="text-2xl font-bold text-slate-900">{result}</span>
-            <button onClick={handleCopy} className="text-slate-400 hover:text-emerald-600 transition-colors p-1">
-              {copied ? <Check className="w-5 h-5 text-emerald-600" /> : <Copy className="w-5 h-5" />}
-            </button>
+    <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+        
+        {/* From Input */}
+        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 transition-all focus-within:border-emerald-500 focus-within:bg-white">
+          <label className="block text-xs font-medium text-slate-500 mb-2 uppercase tracking-wide">Amount</label>
+          <div className="flex items-center justify-between gap-2">
+            <input 
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              className="w-full bg-transparent text-2xl font-bold text-slate-900 outline-none focus:outline-none placeholder:text-slate-300"
+              placeholder="0.00"
+            />
+            <select 
+              value={from} 
+              onChange={(e) => {
+                setFrom(e.target.value);
+                if (onPairChange) onPairChange(e.target.value, to);
+              }}
+              className="bg-white text-sm font-semibold text-slate-700 border border-slate-200 rounded-lg px-3 py-2 pr-8 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer min-w-[110px]"
+            >
+              {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
+            </select>
           </div>
         </div>
-        <select 
-          value={to} 
-          onChange={(e) => {
-            setTo(e.target.value);
-            if (onPairChange) onPairChange(from, e.target.value);
-          }}
-          className="p-4 border border-slate-200 rounded-xl bg-slate-50 font-semibold focus:ring-2 focus:ring-emerald-500 outline-none"
-        >
-          {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
-        </select>
+
+        {/* Swap Button */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block">
+          <button 
+            onClick={handleSwap} 
+            className="bg-white p-2.5 border-2 border-slate-200 rounded-full hover:border-emerald-500 hover:bg-emerald-50 transition-all hover:rotate-180 duration-300 shadow-sm"
+            aria-label="Swap currencies"
+          >
+            <ArrowUpDown className="w-4 h-4 text-emerald-600" />
+          </button>
+        </div>
+
+        {/* To Result */}
+        <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100 transition-all focus-within:border-emerald-500">
+          <label className="block text-xs font-medium text-emerald-700 mb-2 uppercase tracking-wide">Converted</label>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 w-full">
+              <span className="text-2xl font-bold text-slate-900 w-full">{result}</span>
+              <button onClick={handleCopy} className="text-slate-400 hover:text-emerald-600 transition-colors p-1" aria-label="Copy result">
+                {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+            <select 
+              value={to} 
+              onChange={(e) => {
+                setTo(e.target.value);
+                if (onPairChange) onPairChange(from, e.target.value);
+              }}
+              className="bg-white text-sm font-semibold text-slate-700 border border-slate-200 rounded-lg px-3 py-2 pr-8 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer min-w-[110px]"
+            >
+              {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {/* Mobile Swap Button */}
+        <div className="flex justify-center md:hidden -my-2">
+          <button 
+            onClick={handleSwap} 
+            className="bg-white p-2 border-2 border-slate-200 rounded-full hover:border-emerald-500 hover:bg-emerald-50 transition-all rotate-90 shadow-sm"
+            aria-label="Swap currencies"
+          >
+            <ArrowUpDown className="w-4 h-4 text-emerald-600" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-6 text-center text-sm text-slate-500">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+          1 {from} = {rate.toFixed(4)} {to}
+        </span>
       </div>
     </div>
   );
