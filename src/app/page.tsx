@@ -3,6 +3,7 @@ import { CURRENCIES } from '@/lib/currencies';
 import { fetchHistoricalRates } from '@/lib/api';
 import Link from 'next/link';
 import { ShieldCheck, Clock, Globe2, TrendingUp } from 'lucide-react';
+import CurrencyFlag from '@/components/CurrencyFlag';
 
 const popularPairs = [
   { from: 'USD', to: 'EUR' },
@@ -101,9 +102,9 @@ export default async function Home() {
                 <div key={`${pair.from}-${pair.to}`} className="group bg-white p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition-all">
                   <Link href={`/convert/${pair.from}-to-${pair.to}`} className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{fromCur.flag}</span>
+                      <CurrencyFlag code={pair.from} className="!w-8 !h-6" />
                       <span className="text-slate-300 group-hover:text-emerald-500 transition-colors">→</span>
-                      <span className="text-2xl">{toCur.flag}</span>
+                      <CurrencyFlag code={pair.to} className="!w-8 !h-6" />
                     </div>
                     <span className="font-bold text-slate-900">{pair.from}/{pair.to}</span>
                   </Link>
@@ -126,7 +127,7 @@ export default async function Home() {
                 href={`/currencies/${currency.code.toLowerCase()}`}
                 className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-sm transition-all"
               >
-                <span className="text-2xl">{currency.flag}</span>
+                <CurrencyFlag code={currency.code} className="!w-8 !h-6" />
                 <div>
                   <div className="font-semibold text-slate-900 text-sm">{currency.code}</div>
                   <div className="text-xs text-slate-500 truncate">{currency.name}</div>
