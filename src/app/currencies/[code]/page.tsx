@@ -1,4 +1,5 @@
 import { CURRENCIES, getCurrency } from '@/lib/currencies';
+import CurrencyFlag from '@/components/CurrencyFlag';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -28,7 +29,7 @@ export default function CurrencyPage({ params }: { params: { code: string } }) {
       </nav>
       
       <div className="flex items-center gap-4 mb-8">
-        <span className="text-6xl">{currency.flag}</span>
+        <CurrencyFlag code={currency.code} className="!w-16 !h-12" />
         <div>
           <h1 className="font-display text-4xl font-bold text-slate-900">{currency.name} ({currency.code})</h1>
           <p className="text-slate-500">Currency Symbol: {currency.symbol}</p>
