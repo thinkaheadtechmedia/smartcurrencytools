@@ -42,7 +42,11 @@ export default function HistoricalChart({ data }: Props) {
             boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
           }}
           labelStyle={{ color: '#64748b', fontSize: '12px', marginBottom: '4px' }}
-          formatter={(value: number) => [value.toFixed(4), 'Rate']}
+          formatter={(value: any) => {
+            if (value === undefined || value === null) return ['', 'Rate'];
+            const num = Number(value);
+            return [isNaN(num) ? '' : num.toFixed(4), 'Rate'];
+          }}
         />
         <Area 
           type="monotone" 
