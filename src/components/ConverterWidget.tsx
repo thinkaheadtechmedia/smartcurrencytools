@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ArrowUpDown, Copy, Check } from 'lucide-react';
 import { CURRENCIES } from '@/lib/currencies';
+import CurrencyFlag from './CurrencyFlag';
 
 interface Props {
   initialFrom: string;
@@ -50,16 +51,19 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
               className="w-full bg-transparent text-2xl font-bold text-slate-900 outline-none placeholder:text-slate-300"
               placeholder="0.00"
             />
-            <select 
-              value={from} 
-              onChange={(e) => {
-                setFrom(e.target.value);
-                if (onPairChange) onPairChange(e.target.value, to);
-              }}
-              className="bg-white text-sm font-semibold text-slate-700 border border-slate-200 rounded-lg px-3 py-2 pr-8 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer min-w-[110px]"
-            >
-              {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
-            </select>
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg pl-2 pr-1">
+              <CurrencyFlag code={from} />
+              <select 
+                value={from} 
+                onChange={(e) => {
+                  setFrom(e.target.value);
+                  if (onPairChange) onPairChange(e.target.value, to);
+                }}
+                className="bg-white text-sm font-semibold text-slate-700 py-2 pr-6 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+              >
+                {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -84,16 +88,19 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
                 {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
-            <select 
-              value={to} 
-              onChange={(e) => {
-                setTo(e.target.value);
-                if (onPairChange) onPairChange(from, e.target.value);
-              }}
-              className="bg-white text-sm font-semibold text-slate-700 border border-slate-200 rounded-lg px-3 py-2 pr-8 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer min-w-[110px]"
-            >
-              {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
-            </select>
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg pl-2 pr-1">
+              <CurrencyFlag code={to} />
+              <select 
+                value={to} 
+                onChange={(e) => {
+                  setTo(e.target.value);
+                  if (onPairChange) onPairChange(from, e.target.value);
+                }}
+                className="bg-white text-sm font-semibold text-slate-700 py-2 pr-6 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+              >
+                {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
+              </select>
+            </div>
           </div>
         </div>
 
