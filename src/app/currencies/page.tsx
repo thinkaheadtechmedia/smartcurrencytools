@@ -1,4 +1,5 @@
 import { CURRENCIES } from '@/lib/currencies';
+import CurrencyFlag from '@/components/CurrencyFlag';
 import Link from 'next/link';
 
 export default function CurrenciesIndex() {
