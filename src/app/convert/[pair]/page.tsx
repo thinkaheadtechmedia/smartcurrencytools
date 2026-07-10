@@ -2,6 +2,7 @@ import { CURRENCIES, getCurrency } from '@/lib/currencies';
 import { fetchLatestRates, fetchHistoricalRates } from '@/lib/api';
 import ConverterWidget from '@/components/ConverterWidget';
 import HistoricalChart from '@/components/HistoricalChart';
+import CurrencyFlag from '@/components/CurrencyFlag';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -67,9 +68,13 @@ export default async function PairPage({ params }: { params: { pair: string } })
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="lg:sticky lg:top-24">
-            <h1 className="font-display text-4xl font-bold mb-2 text-slate-900">
-              {from.flag} {from.name} ({from.code}) to {to.flag} {to.name} ({to.code})
-            </h1>
+            <div className="flex items-center gap-3 mb-2">
+              <CurrencyFlag code={from.code} className="!w-12 !h-8" />
+              <h1 className="font-display text-3xl md:text-4xl font-bold text-slate-900">
+                {from.name} ({from.code}) to {to.name} ({to.code})
+              </h1>
+              <CurrencyFlag code={to.code} className="!w-12 !h-8" />
+            </div>
             <p className="text-lg text-slate-600 mb-8">Live exchange rate: 1 {from.code} = <span className="font-bold text-emerald-600">{rate.toFixed(4)} {to.code}</span></p>
             
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
@@ -102,9 +107,9 @@ export default async function PairPage({ params }: { params: { pair: string } })
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {CURRENCIES.filter(c => c.code !== from.code && c.code !== to.code).slice(0, 8).map(c => (
               <Link key={c.code} href={`/convert/${from.code}-to-${c.code}`} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition-all">
-                <span className="text-xl">{from.flag}</span>
+                <CurrencyFlag code={from.code} className="!w-6 !h-4" />
                 <span className="text-slate-300">→</span>
-                <span className="text-xl">{c.flag}</span>
+                <CurrencyFlag code={c.code} className="!w-6 !h-4" />
                 <span className="ml-auto font-semibold text-slate-900 text-sm">{from.code}/{c.code}</span>
               </Link>
             ))}
