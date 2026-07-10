@@ -1,14 +1,15 @@
 import { CURRENCIES, getCurrency } from '@/lib/currencies';
-import CurrencyFlag from '@/components/CurrencyFlag';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import CurrencyFlag from '@/components/CurrencyFlag';
 
 export async function generateStaticParams() {
   return CURRENCIES.map(c => ({ code: c.code.toLowerCase() }));
 }
 
-export async function generateMetadata({ params }: { params: { code: string } }) {
-  const currency = getCurrency(params.code);
+export async function generateMetadata({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = await params;
+  const currency = getCurrency(code);
   if (!currency) return {};
   return {
     title: `${currency.name} (${currency.code}) Exchange Rates & Info`,
@@ -16,8 +17,9 @@ export async function generateMetadata({ params }: { params: { code: string } })
   };
 }
 
-export default function CurrencyPage({ params }: { params: { code: string } }) {
-  const currency = getCurrency(params.code);
+export default async function CurrencyPage({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = await params;
+  const currency = getCurrency(code);
   if (!currency) return notFound();
 
   const otherCurrencies = CURRENCIES.filter(c => c.code !== currency.code).slice(0, 10);
@@ -45,9 +47,9 @@ export default function CurrencyPage({ params }: { params: { code: string } }) {
         {otherCurrencies.map(c => (
           <Link key={c.code} href={`/convert/${currency.code}-to-${c.code}`} className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition-all">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">{currency.flag}</span>
+              <CurrencyFlag code={currency.code} className="!w-8 !h-6" />
               <span className="text-slate-300">→</span>
-              <span className="text-2xl">{c.flag}</span>
+              <CurrencyFlag code={c.code} className="!w-8 !h-6" />
             </div>
             <span className="font-semibold text-slate-900">{currency.code} to {c.code}</span>
           </Link>
