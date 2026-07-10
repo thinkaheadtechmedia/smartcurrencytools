@@ -1,50 +1,67 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Smart Currency Tools | Live Exchange Rates & Currency Converter",
   description: "Convert 170+ world currencies with live exchange rates, historical charts, and rate alerts. Fast, accurate, and free currency conversion tools.",
   metadataBase: new URL("https://smartcurrencytools.com"),
-  openGraph: {
-    title: "Smart Currency Tools | Live Exchange Rates & Converter",
-    description: "Convert 170+ world currencies with live exchange rates.",
-    type: "website",
-  }
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <header className="border-b border-gray-200 bg-white">
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <body className="font-sans bg-slate-50 text-slate-900 antialiased">
+        <header className="bg-slate-900 text-white sticky top-0 z-50 shadow-sm">
           <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold text-blue-600">
-              SmartCurrency<span className="text-gray-900">Tools</span>
+            <Link href="/" className="font-display text-xl font-bold text-white tracking-tight">
+              Smart<span className="text-emerald-400">Currency</span>
             </Link>
-            <div className="hidden md:flex gap-6 text-sm font-medium text-gray-600">
-              <Link href="/" className="hover:text-blue-600">Converter</Link>
-              <Link href="/currencies" className="hover:text-blue-600">Currencies</Link>
-              <Link href="/blog" className="hover:text-blue-600">Blog</Link>
-              <Link href="/about" className="hover:text-blue-600">About</Link>
+            <div className="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+              <Link href="/" className="hover:text-emerald-400 transition-colors">Converter</Link>
+              <Link href="/currencies" className="hover:text-emerald-400 transition-colors">Currencies</Link>
+              <Link href="/blog" className="hover:text-emerald-400 transition-colors">Blog</Link>
+              <Link href="/about" className="hover:text-emerald-400 transition-colors">About</Link>
             </div>
           </nav>
         </header>
         
-        <main className="min-h-[calc(100vh-4rem)] bg-gray-50">
-          {children}
-        </main>
+        <main className="min-h-[calc(100vh-4rem)]">{children}</main>
 
-        <footer className="bg-white border-t border-gray-200 py-8">
-          <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
-            <p>© {new Date().getFullYear()} SmartCurrencyTools. Data provided by Frankfurter.app, updated hourly.</p>
+        <footer className="bg-slate-900 text-slate-400 py-12 mt-20">
+          <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-white font-display font-semibold mb-4">Tools</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/" className="hover:text-emerald-400">Converter</Link></li>
+                <li><Link href="/currencies" className="hover:text-emerald-400">Currencies</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-white font-display font-semibold mb-4">Company</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/about" className="hover:text-emerald-400">About</Link></li>
+                <li><Link href="/blog" className="hover:text-emerald-400">Blog</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-white font-display font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/privacy" className="hover:text-emerald-400">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-emerald-400">Terms of Service</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-white font-display font-semibold mb-4">Data Source</h3>
+              <p className="text-sm">Rates provided by Frankfurter.app. Updated hourly.</p>
+            </div>
+          </div>
+          <div className="max-w-6xl mx-auto px-4 mt-8 pt-8 border-t border-slate-800 text-center text-xs">
+            © {new Date().getFullYear()} SmartCurrencyTools. All rights reserved.
           </div>
         </footer>
       </body>
