@@ -1,6 +1,6 @@
 import { CURRENCIES, getCurrency } from '@/lib/currencies';
 import { fetchLatestRates, fetchHistoricalRates } from '@/lib/api';
-import ConverterWidget from '@/components/ConverterWidget';
+import CurrencyDashboard from '@/components/CurrencyDashboard';
 import HistoricalChart from '@/components/HistoricalChart';
 import CurrencyFlag from '@/components/CurrencyFlag';
 import Link from 'next/link';
@@ -43,6 +43,7 @@ export default async function PairPage({ params }: { params: Promise<{ pair: str
 
   if (!from || !to) return notFound();
 
+  // Fetch data server-side
   const latestData = await fetchLatestRates(from.code, to.code);
   const historicalData = await fetchHistoricalRates(from.code, to.code, 365);
   
@@ -106,9 +107,13 @@ export default async function PairPage({ params }: { params: Promise<{ pair: str
             Live exchange rate: 1 {from.code} = <span className="font-bold text-emerald-600">{rate.toFixed(4)} {to.code}</span>
           </p>
           
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <ConverterWidget initialFrom={from.code} initialTo={to.code} initialRate={rate} />
-          </div>
+          {/* Use CurrencyDashboard here to handle live state */}
+          <CurrencyDashboard 
+            initialFrom={from.code} 
+            initialTo={to.code} 
+            initialRate={rate} 
+            initialHistorical={historicalData}
+          />
 
           <div className="mt-8 bg-white p-6 rounded-2xl border border-slate-100">
             <h2 className="font-display text-xl font-semibold mb-4 text-slate-900">Common Conversions</h2>
@@ -131,7 +136,7 @@ export default async function PairPage({ params }: { params: Promise<{ pair: str
         </div>
       </div>
 
-      {/* PHASE 2: Visible FAQ Section */}
+      {/* Visible FAQ Section */}
       <div className="mt-16 max-w-3xl mx-auto">
         <h2 className="font-display text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
         <div className="space-y-4">
