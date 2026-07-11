@@ -1,6 +1,6 @@
 import CurrencyDashboard from '@/components/CurrencyDashboard';
 import { CURRENCIES } from '@/lib/currencies';
-import { fetchHistoricalRates } from '@/lib/api';
+import { fetchHistoricalRates, fetchLatestRates } from '@/lib/api';
 import Link from 'next/link';
 import { ShieldCheck, Clock, Globe2, TrendingUp } from 'lucide-react';
 import CurrencyFlag from '@/components/CurrencyFlag';
@@ -17,7 +17,10 @@ const popularPairs = [
 ];
 
 export default async function Home() {
+  // Fetch REAL initial data for USD to EUR
   const initialHistorical = await fetchHistoricalRates('USD', 'EUR', 7);
+  const initialLatest = await fetchLatestRates('USD', 'EUR');
+  const initialRate = initialLatest?.rates?.EUR || 0; // Removed the 0.92 hardcode
 
   return (
     <div>
@@ -42,7 +45,7 @@ export default async function Home() {
               <CurrencyDashboard 
                 initialFrom="USD" 
                 initialTo="EUR" 
-                initialRate={0.92} 
+                initialRate={initialRate} 
                 initialHistorical={initialHistorical}
               />
             </div>
