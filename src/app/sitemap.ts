@@ -4,7 +4,7 @@ import { posts } from '@/lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://smartcurrencytools.com';
-  const staticRoutes = ['', '/currencies', '/blog', '/about', '/contact', '/rate-alerts'].map(r => ({
+  const staticRoutes = ['', '/currencies', '/blog', '/about', '/contact', '/rate-alerts', '/crypto'].map(r => ({
     url: `${baseUrl}${r}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8
   }));
 
