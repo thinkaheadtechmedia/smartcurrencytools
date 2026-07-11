@@ -29,7 +29,6 @@ export default function CurrencyDashboard({
     const updateData = async () => {
       setLoading(true);
       try {
-        // Fetch both latest rate and historical chart data in parallel
         const [newHistorical, newLatest] = await Promise.all([
           fetchHistoricalRates(from, to, period),
           fetchLatestRates(from, to)
@@ -37,17 +36,19 @@ export default function CurrencyDashboard({
         
         setHistoricalData(newHistorical);
         
-        // Update the live rate if the API call succeeded
         if (newLatest?.rates?.[to]) {
           setRate(newLatest.rates[to]);
+        } else {
+          // If API fails, reset rate to 0 so we don't show stale/wrong data
+          setRate(0); 
         }
       } catch (error) {
         console.error("Failed to update dashboard data", error);
+        setRate(0);
       }
       setLoading(false);
     };
     
-    // Only fetch if the pair actually changed from initial load
     if (from !== initialFrom || to !== initialTo || period !== 7) {
         updateData();
     }
@@ -58,7 +59,13 @@ export default function CurrencyDashboard({
     const newTo = from;
     setFrom(newFrom);
     setTo(newTo);
-    setRate(1 / rate); // Optimistic UI update for instant feedback
+    
+    // Guard against dividing by zero or undefined to prevent Infinity/NaN bugs
+    if (rate && rate > 0) {
+      setRate(1 / rate);
+    } else {
+      setRate(0);
+    }
   };
 
   return (

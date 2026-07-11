@@ -16,8 +16,15 @@ export async function GET(req: Request) {
   // 3. Check rates and send emails
   for (const alert of mockAlerts) {
     const data = await fetchLatestRates(alert.from, alert.to);
+    if (!data?.rates) {
+      continue;
+    }
+
     const currentRate = data.rates[alert.to];
-    
+    if (currentRate === undefined) {
+      continue;
+    }
+
     if (currentRate >= alert.target) {
       // Import and send via Resend
       // const { Resend } = await import('resend');
