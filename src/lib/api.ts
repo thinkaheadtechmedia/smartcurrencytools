@@ -6,7 +6,9 @@ export async function fetchLatestRates(from: string, to: string) {
       next: { revalidate: 3600 }
     });
     if (!res.ok) return null;
-    return res.json();
+    const data = await res.json();
+    console.log(`[API DEBUG] Fetched latest for ${from}-${to}:`, data); // <-- DEBUG LOG
+    return data;
   } catch (error) {
     console.error(`Failed to fetch latest rates for ${from}-${to}:`, error);
     return null;
@@ -24,7 +26,8 @@ export async function fetchHistoricalRates(from: string, to: string, days: numbe
       next: { revalidate: 86400 }
     });
     if (!res.ok) return null;
-    return res.json();
+    const data = await res.json();
+    return data;
   } catch (error) {
     console.error(`Failed to fetch historical rates for ${from}-${to}:`, error);
     return null;
