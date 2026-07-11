@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ConverterWidget from './ConverterWidget';
 import HistoricalChart from './HistoricalChart';
-import { fetchHistoricalRates } from '@/lib/api';
+import { fetchHistoricalRates, fetchLatestRates } from '@/lib/api';
 
 interface DashboardProps {
   initialFrom: string;
@@ -20,38 +20,57 @@ export default function CurrencyDashboard({
 }: DashboardProps) {
   const [from, setFrom] = useState(initialFrom);
   const [to, setTo] = useState(initialTo);
+  const [rate, setRate] = useState(initialRate);
   const [period, setPeriod] = useState(7);
   const [historicalData, setHistoricalData] = useState(initialHistorical);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const updateChart = async () => {
+    const updateData = async () => {
       setLoading(true);
       try {
-        const newData = await fetchHistoricalRates(from, to, period);
-        setHistoricalData(newData);
+        // Fetch both latest rate and historical chart data in parallel
+        const [newHistorical, newLatest] = await Promise.all([
+          fetchHistoricalRates(from, to, period),
+          fetchLatestRates(from, to)
+        ]);
+        
+        setHistoricalData(newHistorical);
+        
+        // Update the live rate if the API call succeeded
+        if (newLatest?.rates?.[to]) {
+          setRate(newLatest.rates[to]);
+        }
       } catch (error) {
-        console.error("Failed to update chart", error);
+        console.error("Failed to update dashboard data", error);
       }
       setLoading(false);
     };
     
+    // Only fetch if the pair actually changed from initial load
     if (from !== initialFrom || to !== initialTo || period !== 7) {
-        updateChart();
+        updateData();
     }
   }, [from, to, period, initialFrom, initialTo]);
+
+  const handleSwap = () => {
+    const newFrom = to;
+    const newTo = from;
+    setFrom(newFrom);
+    setTo(newTo);
+    setRate(1 / rate); // Optimistic UI update for instant feedback
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
       <div className="p-6 sm:p-8 border-b border-slate-100">
         <ConverterWidget 
-          initialFrom={from} 
-          initialTo={to} 
-          initialRate={initialRate}
-          onPairChange={(newFrom: string, newTo: string) => {
-            setFrom(newFrom);
-            setTo(newTo);
-          }}
+          from={from}
+          to={to}
+          rate={rate}
+          setFrom={setFrom}
+          setTo={setTo}
+          handleSwap={handleSwap}
         />
       </div>
       
