@@ -6,27 +6,17 @@ import { CURRENCIES } from '@/lib/currencies';
 import CurrencyFlag from './CurrencyFlag';
 
 interface Props {
-  initialFrom: string;
-  initialTo: string;
-  initialRate: number;
-  onPairChange?: (from: string, to: string) => void;
+  from: string;
+  to: string;
+  rate: number;
+  setFrom: (val: string) => void;
+  setTo: (val: string) => void;
+  handleSwap: () => void;
 }
 
-export default function ConverterWidget({ initialFrom, initialTo, initialRate, onPairChange }: Props) {
+export default function ConverterWidget({ from, to, rate, setFrom, setTo, handleSwap }: Props) {
   const [amount, setAmount] = useState(100);
-  const [from, setFrom] = useState(initialFrom);
-  const [to, setTo] = useState(initialTo);
-  const [rate, setRate] = useState(initialRate);
   const [copied, setCopied] = useState(false);
-
-  const handleSwap = () => {
-    const newFrom = to;
-    const newTo = from;
-    setFrom(newFrom);
-    setTo(newTo);
-    setRate(1 / rate);
-    if (onPairChange) onPairChange(newFrom, newTo);
-  };
 
   const result = (amount * rate).toFixed(2);
 
@@ -55,10 +45,7 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
               <CurrencyFlag code={from} />
               <select 
                 value={from} 
-                onChange={(e) => {
-                  setFrom(e.target.value);
-                  if (onPairChange) onPairChange(e.target.value, to);
-                }}
+                onChange={(e) => setFrom(e.target.value)}
                 className="bg-white text-sm font-semibold text-slate-700 py-2 pr-6 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
               >
                 {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
@@ -92,10 +79,7 @@ export default function ConverterWidget({ initialFrom, initialTo, initialRate, o
               <CurrencyFlag code={to} />
               <select 
                 value={to} 
-                onChange={(e) => {
-                  setTo(e.target.value);
-                  if (onPairChange) onPairChange(from, e.target.value);
-                }}
+                onChange={(e) => setTo(e.target.value)}
                 className="bg-white text-sm font-semibold text-slate-700 py-2 pr-6 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
               >
                 {CURRENCIES.map(c => <option key={c.code} value={c.code}>{c.code}</option>)}
