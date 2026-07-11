@@ -43,29 +43,52 @@ export default async function PairPage({ params }: { params: Promise<{ pair: str
 
   if (!from || !to) return notFound();
 
-  // Fetch data (may return null if API rate limits during build)
   const latestData = await fetchLatestRates(from.code, to.code);
   const historicalData = await fetchHistoricalRates(from.code, to.code, 365);
   
-  // Fallback rate of 0 if API failed, so page can still build
   const rate = latestData?.rates?.[to.code] || 0;
+
+  // Calculate Highest Rate this year for FAQ
+  let highestRate = 0;
+  if (historicalData?.rates) {
+    Object.values(historicalData.rates).forEach((r: any) => {
+      const val = Object.values(r)[0] as number;
+      if (val > highestRate) highestRate = val;
+    });
+  }
+
+  const faqs = [
+    { q: `How much is 100 ${from.code} in ${to.code} today?`, a: `As of today, 100 ${from.code} is equivalent to ${(100 * rate).toFixed(2)} ${to.code}.` },
+    { q: `What is the ${from.code} to ${to.code} exchange rate?`, a: `The current live exchange rate is 1 ${from.code} = ${rate.toFixed(4)} ${to.code}.` },
+    { q: `Is the ${from.code} to ${to.code} rate updated in real time?`, a: `Our rates are synced directly from the European Central Bank and updated hourly to ensure accuracy.` },
+    { q: `What was the highest ${from.code} to ${to.code} rate this year?`, a: `The highest recorded rate for ${from.code} to ${to.code} in the last 365 days was ${highestRate.toFixed(4)}.` }
+  ];
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [{
+    "mainEntity": faqs.map(f => ({
       "@type": "Question",
-      "name": `How much is 100 ${from.code} in ${to.code}?`,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": `As of today, 100 ${from.code} is equivalent to ${(100 * rate).toFixed(2)} ${to.code}.`
-      }
-    }]
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a }
+    }))
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://smartcurrencytools.com" },
+      { "@type": "ListItem", position: 2, name: "Currencies", item: "https://smartcurrencytools.com/currencies" },
+      { "@type": "ListItem", position: 3, name: `${from.code} to ${to.code}`, item: `https://smartcurrencytools.com/convert/${pair}` }
+    ]
   };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
       <nav className="text-sm text-slate-500 mb-6">
         <Link href="/" className="hover:text-emerald-600">Home</Link> &gt; <Link href="/currencies" className="hover:text-emerald-600">Currencies</Link> &gt; {from.code} to {to.code}
       </nav>
@@ -105,6 +128,19 @@ export default async function PairPage({ params }: { params: Promise<{ pair: str
           <div className="h-[400px] w-full bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
             {historicalData ? <HistoricalChart data={historicalData} /> : <div className="h-full flex items-center justify-center text-slate-400">Chart data temporarily unavailable.</div>}
           </div>
+        </div>
+      </div>
+
+      {/* PHASE 2: Visible FAQ Section */}
+      <div className="mt-16 max-w-3xl mx-auto">
+        <h2 className="font-display text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+              <h3 className="font-semibold text-lg mb-2 text-slate-900">{faq.q}</h3>
+              <p className="text-slate-600">{faq.a}</p>
+            </div>
+          ))}
         </div>
       </div>
 
