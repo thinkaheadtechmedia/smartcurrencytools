@@ -23,8 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
               <Link href="/" className="hover:text-emerald-500 transition-colors">Converter</Link>
               <Link href="/currencies" className="hover:text-emerald-500 transition-colors">Currencies</Link>
-              {/* Add this line below */}
               <Link href="/blog" className="hover:text-emerald-500 transition-colors">Blog</Link>
+              {/* Add this line: */}
+              <Link href="/rate-alerts" className="hover:text-emerald-500 transition-colors">Rate Alerts</Link>
               <Link href="/about" className="hover:text-emerald-500 transition-colors">About</Link>
             </div>
           </nav>
