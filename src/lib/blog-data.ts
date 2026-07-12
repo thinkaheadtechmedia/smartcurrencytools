@@ -15,14 +15,14 @@ export const posts: BlogPost[] = [
     slug: 'how-exchange-rates-work',
     title: 'How Exchange Rates Work: A Beginner\'s Guide',
     metaDescription: 'Understand the basics of foreign exchange markets, what makes currency values fluctuate, and how to read exchange rates.',
-    date: '2023-10-01',
+    date: '2025-10-01',
     author: 'SmartCurrencyTools Editorial Team',
     excerpt: 'Understand the basics of foreign exchange markets and what makes currency values fluctuate.',
     image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80',
     altText: 'Foreign exchange market trading charts representing how exchange rates work',
     content: `
       <h1>How Exchange Rates Work: A Beginner's Guide</h1>
-      <p>By the SmartCurrencyTools Editorial Team | Published on October 1, 2023</p>
+      <p>By the SmartCurrencyTools Editorial Team | Published on October 1, 2025</p>
       <p>Have you ever wondered why a cup of coffee costs $4 in New York but €4 in Paris? The answer lies in exchange rates. In this comprehensive guide, we'll break down exactly <strong>how exchange rates work</strong>, what drives their value, and how you can use this knowledge to your advantage.</p>
       
       <h2>What is an Exchange Rate?</h2>
@@ -62,14 +62,14 @@ export const posts: BlogPost[] = [
     slug: 'best-time-to-exchange-usd-to-eur',
     title: 'Best Time to Exchange USD to EUR',
     metaDescription: 'Timing the forex market is hard, but these tips can help you get the best USD to EUR exchange rate.',
-    date: '2023-10-05',
+    date: '2025-10-05',
     author: 'SmartCurrencyTools Editorial Team',
     excerpt: 'Timing the market is hard, but these tips can help you get the best rate.',
     image: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&w=1200&q=80',
     altText: 'US Dollar and Euro banknotes representing the best time to exchange USD to EUR',
     content: `
       <h1>Best Time to Exchange USD to EUR</h1>
-      <p>By the SmartCurrencyTools Editorial Team | Published on October 5, 2023</p>
+      <p>By the SmartCurrencyTools Editorial Team | Published on October 5, 2025</p>
       <p>Exchanging US Dollars (USD) for Euros (EUR) can feel like a guessing game. Exchange rates fluctuate by the second, and getting the best rate can save you hundreds of dollars on a large transaction. While no one can predict the market perfectly, there are proven strategies to find the <strong>best time to exchange USD to EUR</strong>.</p>
       
       <h2>Forex Market Hours: When is it Open?</h2>
@@ -102,14 +102,14 @@ export const posts: BlogPost[] = [
     slug: 'mid-market-rate-vs-bank-rate',
     title: 'Mid-Market Rate vs Bank Rate: What\'s the Difference',
     metaDescription: 'Banks often hide fees in bad exchange rates. Learn the difference between the mid-market rate and the bank rate.',
-    date: '2023-10-10',
+    date: '2026-07-10',
     author: 'SmartCurrencyTools Editorial Team',
     excerpt: 'Banks often hide fees in bad exchange rates. Learn the difference.',
     image: 'https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=1200&q=80',
     altText: 'Illustration showing the difference between mid-market rate and bank rate in currency exchange',
     content: `
       <h1>Mid-Market Rate vs Bank Rate: What's the Difference</h1>
-      <p>By the SmartCurrencyTools Editorial Team | Published on October 10, 2023</p>
+      <p>By the SmartCurrencyTools Editorial Team | Published on July 10, 2026</p>
       <p>When you exchange currency, the rate you see online is rarely the rate your bank actually gives you. This discrepancy costs consumers billions of dollars every year. To stop overpaying, you need to understand the difference between the <strong>mid-market rate</strong> and the <strong>bank rate</strong>.</p>
       
       <h2>What is the Mid-Market Rate?</h2>

@@ -15,7 +15,9 @@ const cryptoIcons: Record<string, string> = {
   ETH: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
   USDT: 'https://assets.coingecko.com/coins/images/325/large/Tether.png',
   BNB: 'https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png',
-  SOL: 'https://assets.coingecko.com/coins/images/4128/large/solana.png'
+  SOL: 'https://assets.coingecko.com/coins/images/4128/large/solana.png',
+  XRP: 'https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png', // Added
+  ADA: 'https://assets.coingecko.com/coins/images/975/large/cardano.png' // Added
 };
 
 export default function CurrencyFlag({ code, className = '' }: { code: string; className?: string }) {
