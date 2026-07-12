@@ -20,6 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans bg-slate-50 text-slate-900 antialiased">
         <header className="bg-white border-b border-slate-200 sticky top-0 z-50 backdrop-blur-md bg-white/90">
+
+        <AdSense />
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <Link href="/" className="font-display text-xl font-bold tracking-tight text-slate-900">
               Smart<span className="text-emerald-500">Currency</span>
@@ -34,7 +36,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link>
             </div>
           </nav>
-          <AdSense />
         </header>
         
       <main className="min-h-[calc(100vh-4rem)]">{children}</main>
