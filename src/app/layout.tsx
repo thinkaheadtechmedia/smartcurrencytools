@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import CookieConsent from '@/components/CookieConsent';
+import AdSense from '@/components/AdSense';
 
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </footer>
           {/* Add these two lines right before the closing body tag */}
           <GoogleAnalytics />
+           <AdSense />
           <CookieConsent />
       </body>
     </html>
