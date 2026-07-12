@@ -23,11 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
                 <Link href="/" className="hover:text-emerald-500 transition-colors">Converter</Link>
                 <Link href="/currencies" className="hover:text-emerald-500 transition-colors">Currencies</Link>
-                {/* Add this line: */}
                 <Link href="/crypto" className="hover:text-emerald-500 transition-colors">Crypto</Link>
                 <Link href="/blog" className="hover:text-emerald-500 transition-colors">Blog</Link>
                 <Link href="/rate-alerts" className="hover:text-emerald-500 transition-colors">Rate Alerts</Link>
-                <Link href="/about" className="hover:text-emerald-500 transition-colors">About</Link>
+                {/* Add this line: */}
+                <Link href="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link>
             </div>
           </nav>
         </header>
@@ -44,10 +44,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </ul>
             </div>
             <div>
-              <h3 className="text-white font-display font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-emerald-400">About</Link></li>
-              </ul>
+                <h3 className="text-white font-display font-semibold mb-4">Company</h3>
+                <ul className="space-y-2 text-sm">
+                  <li><Link href="/about" className="hover:text-emerald-400">About</Link></li>
+                  {/* Add this line: */}
+                  <li><Link href="/contact" className="hover:text-emerald-400">Contact</Link></li>
+                </ul>
             </div>
             <div>
               <h3 className="text-white font-display font-semibold mb-4">Legal</h3>
