@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const { error } = await resend.emails.send({
       // Use onboarding@resend.dev for testing. 
       // Once you verify smartcurrencytools.com in Resend, change this to contact@smartcurrencytools.com
-      from: 'SmartCurrencyTools <onboarding@resend.dev>',
+      from: 'SmartCurrencyTools <contact@smartcurrencytools.com>',
       to: ['stoicbonding@gmail.com'], // Sending directly to your email for testing
       replyTo: email, // If you hit reply, it will go to the user who filled the form
       subject: `New Contact Form Message from ${name}`,
