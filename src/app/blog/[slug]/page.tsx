@@ -1,14 +1,38 @@
 import { posts } from '@/lib/blog-data';
+import { Pool } from 'pg';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
+export const revalidate = 3600; // Revalidate to pick up DB edits
+
 export async function generateStaticParams() {
+  // We still statically generate the seeded posts at build time
   return posts.map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = posts.find(p => p.slug === slug);
+  let post = posts.find(p => p.slug === slug);
+  
+  if (!post && process.env.DATABASE_URL) {
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const { rows } = await pool.query('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
+    if (rows.length > 0) {
+      post = {
+        slug: rows[0].slug,
+        title: rows[0].title,
+        excerpt: rows[0].excerpt,
+        content: rows[0].content,
+        image: rows[0].image_url,
+        altText: rows[0].alt_text,
+        date: new Date(rows[0].date).toLocaleDateString('en-CA'),
+        author: 'SmartCurrencyTools Editorial Team',
+        metaDescription: rows[0].excerpt
+      } as any;
+    }
+    await pool.end();
+  }
+
   if (!post) return {};
   return { 
     title: post.title, 
@@ -19,7 +43,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = posts.find(p => p.slug === slug);
+  let post = posts.find(p => p.slug === slug);
+  
+  // If not in static file, check DB
+  if (!post && process.env.DATABASE_URL) {
+    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const { rows } = await pool.query('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
+    if (rows.length > 0) {
+      post = {
+        slug: rows[0].slug,
+        title: rows[0].title,
+        excerpt: rows[0].excerpt,
+        content: rows[0].content,
+        image: rows[0].image_url,
+        altText: rows[0].alt_text,
+        date: new Date(rows[0].date).toLocaleDateString('en-CA'),
+        author: 'SmartCurrencyTools Editorial Team',
+        metaDescription: rows[0].excerpt
+      } as any;
+    }
+    await pool.end();
+  }
+
   if (!post) return notFound();
 
   const articleSchema = {
