@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { neon } from '@neondatabase/serverless';
+import { Pool } from 'pg';
 import { Resend } from 'resend';
 
 export async function GET(req: Request) {
-  // 1. Verify authorization to prevent external abuse
+  // 1. Verify authorization
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 });
@@ -13,14 +13,15 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
   }
 
-  const sql = neon(process.env.DATABASE_URL);
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
     // 2. Fetch all un-triggered alerts
-    const alerts = await sql`SELECT * FROM rate_alerts WHERE is_triggered = FALSE`;
+    const { rows: alerts } = await pool.query('SELECT * FROM rate_alerts WHERE is_triggered = FALSE');
     
     if (alerts.length === 0) {
+      await pool.end();
       return NextResponse.json({ message: 'No alerts to check.' });
     }
 
@@ -56,18 +57,19 @@ export async function GET(req: Request) {
             `
           });
 
-          // Mark as triggered so we don't spam them
-          await sql`UPDATE rate_alerts SET is_triggered = TRUE WHERE id = ${alert.id}`;
-          console.log(`Alert triggered and email sent to ${alert.email}`);
+          // Mark as triggered
+          await pool.query('UPDATE rate_alerts SET is_triggered = TRUE WHERE id = $1', [alert.id]);
         } catch (emailError) {
           console.error(`Failed to send email to ${alert.email}:`, emailError);
         }
       }
     }
 
+    await pool.end();
     return NextResponse.json({ success: true, checked: alerts.length });
-  } catch (error) {
+  } catch (error: any) {
+    await pool.end();
     console.error('Cron job failed:', error);
-    return NextResponse.json({ error: 'Cron job failed' }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
