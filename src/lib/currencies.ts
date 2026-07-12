@@ -2,7 +2,7 @@ export interface Currency {
   code: string;
   name: string;
   symbol: string;
-  flag?: string; // Emoji fallback, but we use Image component mostly
+  flag?: string;
   isCrypto?: boolean;
 }
 
@@ -55,6 +55,8 @@ export const CURRENCIES: Currency[] = [
   { code: 'USDT', name: 'Tether', symbol: '₮', isCrypto: true },
   { code: 'BNB', name: 'Binance Coin', symbol: 'BNB', isCrypto: true },
   { code: 'SOL', name: 'Solana', symbol: '◎', isCrypto: true },
+  { code: 'XRP', name: 'Ripple', symbol: 'XRP', isCrypto: true },
+  { code: 'ADA', name: 'Cardano', symbol: 'ADA', isCrypto: true },
 ];
 
 export const getCurrency = (code: string) => CURRENCIES.find(c => c.code === code.toUpperCase());

@@ -115,6 +115,22 @@ export default async function PairPage({ params }: { params: Promise<{ pair: str
             initialHistorical={historicalData}
           />
 
+<div className="flex items-center gap-3 mb-2">
+  <CurrencyFlag code={from.code} className="!w-12 !h-8" />
+  <h1 className="font-display text-3xl md:text-4xl font-bold text-slate-900">
+    {from.name} ({from.code}) to {to.name} ({to.code})
+  </h1>
+  <CurrencyFlag code={to.code} className="!w-12 !h-8" />
+</div>
+
+{/* Add this badge block right here */}
+{(from.isCrypto || to.isCrypto) && (
+  <div className="inline-block bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded-full mb-4 border border-orange-200">
+    Cryptocurrency Pair
+  </div>
+)}
+{/* ... rest of the code (the <p> tag with the live rate) */}
+
           <div className="mt-8 bg-white p-6 rounded-2xl border border-slate-100">
             <h2 className="font-display text-xl font-semibold mb-4 text-slate-900">Common Conversions</h2>
             <div className="grid grid-cols-2 gap-4">
