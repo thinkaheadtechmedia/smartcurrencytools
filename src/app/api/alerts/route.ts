@@ -4,7 +4,7 @@ import { neon } from '@neondatabase/serverless';
 export async function POST(req: Request) {
   try {
     if (!process.env.DATABASE_URL) {
-      return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
+      return NextResponse.json({ error: 'DATABASE_URL is missing in Vercel' }, { status: 500 });
     }
 
     const sql = neon(process.env.DATABASE_URL);
@@ -20,8 +20,9 @@ export async function POST(req: Request) {
     `;
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to save alert:', error);
-    return NextResponse.json({ error: 'Database error' }, { status: 500 });
+    // Return the exact error message to help us debug
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
