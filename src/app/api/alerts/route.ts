@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
 
-// Initialize the Neon client
-const sql = neon(process.env.DATABASE_URL!);
-
 export async function POST(req: Request) {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
     const { email, from, to, target, direction } = await req.json();
 
     if (!email || !from || !to || !target || !direction) {

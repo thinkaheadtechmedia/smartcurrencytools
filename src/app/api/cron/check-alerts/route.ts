@@ -2,15 +2,19 @@ import { NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
 import { Resend } from 'resend';
 
-const sql = neon(process.env.DATABASE_URL!);
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function GET(req: Request) {
   // 1. Verify authorization to prevent external abuse
   const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 });
   }
+
+  if (!process.env.DATABASE_URL) {
+    return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
+  }
+
+  const sql = neon(process.env.DATABASE_URL);
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
     // 2. Fetch all un-triggered alerts
