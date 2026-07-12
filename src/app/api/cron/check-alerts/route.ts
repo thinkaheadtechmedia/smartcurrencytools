@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 import { Resend } from 'resend';
 
+const sql = neon(process.env.DATABASE_URL!);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(req: Request) {
@@ -13,7 +14,7 @@ export async function GET(req: Request) {
 
   try {
     // 2. Fetch all un-triggered alerts
-    const { rows: alerts } = await sql`SELECT * FROM rate_alerts WHERE is_triggered = FALSE`;
+    const alerts = await sql`SELECT * FROM rate_alerts WHERE is_triggered = FALSE`;
     
     if (alerts.length === 0) {
       return NextResponse.json({ message: 'No alerts to check.' });
@@ -21,7 +22,6 @@ export async function GET(req: Request) {
 
     // 3. Check rates and send emails
     for (const alert of alerts) {
-      // Fetch live rate
       const res = await fetch(`https://open.er-api.com/v6/latest/${alert.from_currency}`);
       const data = await res.json();
       const currentRate = data.rates[alert.to_currency];

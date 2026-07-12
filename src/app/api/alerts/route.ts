@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
+
+// Initialize the Neon client
+const sql = neon(process.env.DATABASE_URL!);
 
 export async function POST(req: Request) {
   try {
