@@ -34,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link>
             </div>
           </nav>
+          <AdSense />
         </header>
         
       <main className="min-h-[calc(100vh-4rem)]">{children}</main>
@@ -70,7 +71,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </footer>
           {/* Add these two lines right before the closing body tag */}
           <GoogleAnalytics />
-           <AdSense />
           <CookieConsent />
       </body>
     </html>
