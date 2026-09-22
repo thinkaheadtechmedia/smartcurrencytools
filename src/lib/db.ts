@@ -27,6 +27,7 @@ const globalForDb = globalThis as unknown as {
   mockAlerts?: RateAlert[];
   mockPosts?: DbBlogPost[];
   dbPool?: Pool | null;
+  dbPoolInitialized?: boolean;
 };
 
 if (!globalForDb.mockAlerts) {
@@ -36,27 +37,59 @@ if (!globalForDb.mockPosts) {
   globalForDb.mockPosts = [];
 }
 
-let pgPool: Pool | null = null;
-if (process.env.DATABASE_URL) {
+function isValidDatabaseUrl(urlStr: string | undefined): boolean {
+  if (!urlStr || typeof urlStr !== 'string') return false;
+  const trimmed = urlStr.trim();
+  if (
+    !trimmed ||
+    trimmed.includes('[') ||
+    trimmed.includes(']') ||
+    trimmed.includes('<') ||
+    trimmed.includes('>') ||
+    trimmed.includes('YOUR-PASSWORD') ||
+    trimmed.includes('PROJECT-REF') ||
+    trimmed.includes('POOLER-HOST')
+  ) {
+    return false;
+  }
   try {
-    pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
-  } catch (err) {
-    console.warn('[AI Studio] PostgreSQL pool failed to initialize — falling back to mock DB', err);
-    pgPool = null;
+    const parsed = new URL(trimmed);
+    return parsed.protocol === 'postgres:' || parsed.protocol === 'postgresql:';
+  } catch {
+    return false;
   }
 }
 
 export function getDbPool(): Pool | null {
-  return pgPool;
+  if (globalForDb.dbPoolInitialized) {
+    return globalForDb.dbPool ?? null;
+  }
+  globalForDb.dbPoolInitialized = true;
+
+  if (isValidDatabaseUrl(process.env.DATABASE_URL)) {
+    try {
+      globalForDb.dbPool = new Pool({ connectionString: process.env.DATABASE_URL!.trim() });
+    } catch {
+      globalForDb.dbPool = null;
+    }
+  } else {
+    globalForDb.dbPool = null;
+  }
+  return globalForDb.dbPool ?? null;
 }
 
 export async function queryDb<T = Record<string, unknown>>(sql: string, params: unknown[] = []): Promise<{ rows: T[] }> {
-  if (process.env.DATABASE_URL && pgPool) {
+  const pool = getDbPool();
+  if (pool) {
     try {
-      const res = await pgPool.query(sql, params as (string | number | boolean | null | undefined)[]);
+      const res = await pool.query(sql, params as (string | number | boolean | null | undefined)[]);
       return res as unknown as { rows: T[] };
     } catch (err) {
-      console.warn('[AI Studio] Database query failed — falling back to in-memory store:', err);
+      if (err instanceof TypeError && err.message.includes('Invalid URL')) {
+        globalForDb.dbPool = null;
+      } else {
+        console.warn('[SmartCurrencyTools] Database query failed — falling back to in-memory store:', err instanceof Error ? err.message : err);
+      }
     }
   }
 

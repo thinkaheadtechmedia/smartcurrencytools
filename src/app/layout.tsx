@@ -25,30 +25,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               (function() {
                 try {
                   if (typeof window !== 'undefined') {
-                    var proto = Object.getPrototypeOf(window);
-                    var desc = Object.getOwnPropertyDescriptor(window, 'fetch') || 
-                               (proto ? Object.getOwnPropertyDescriptor(proto, 'fetch') : null) ||
-                               (typeof Window !== 'undefined' ? Object.getOwnPropertyDescriptor(Window.prototype, 'fetch') : null);
-
-                    if (desc && desc.get !== undefined && desc.set === undefined) {
-                      var originalFetch = window.fetch ? window.fetch.bind(window) : null;
+                    var currentFetch = window.fetch;
+                    try {
+                      Object.defineProperty(window, 'fetch', {
+                        configurable: true,
+                        enumerable: true,
+                        get: function() { return currentFetch; },
+                        set: function(fn) { currentFetch = fn; }
+                      });
+                    } catch (e1) {
                       try {
-                        Object.defineProperty(window, 'fetch', {
-                          configurable: true,
-                          enumerable: true,
-                          writable: true,
-                          value: originalFetch
-                        });
-                      } catch (e1) {
-                        var currentFetch = originalFetch;
-                        Object.defineProperty(window, 'fetch', {
-                          configurable: true,
-                          enumerable: true,
-                          get: function() { return currentFetch; },
-                          set: function(fn) { currentFetch = fn; }
-                        });
-                      }
+                        if (typeof Window !== 'undefined' && Window.prototype) {
+                          Object.defineProperty(Window.prototype, 'fetch', {
+                            configurable: true,
+                            enumerable: true,
+                            get: function() { return currentFetch; },
+                            set: function(fn) { currentFetch = fn; }
+                          });
+                        }
+                      } catch (e2) {}
                     }
+
+                    window.addEventListener('error', function(event) {
+                      if (event && event.message && event.message.indexOf('fetch') !== -1 && event.message.indexOf('getter') !== -1) {
+                        event.preventDefault();
+                      }
+                    });
                   }
                 } catch (e) {}
               })();
