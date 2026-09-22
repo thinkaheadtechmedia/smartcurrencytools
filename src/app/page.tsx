@@ -99,8 +99,6 @@ export default async function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {popularPairs.map((pair) => {
-              const fromCur = CURRENCIES.find(c => c.code === pair.from)!;
-              const toCur = CURRENCIES.find(c => c.code === pair.to)!;
               return (
                 <div key={`${pair.from}-${pair.to}`} className="group bg-white p-5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition-all">
                   <Link href={`/convert/${pair.from}-to-${pair.to}`} className="flex items-center justify-between mb-3">

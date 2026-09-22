@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: Request) {
   try {
     const { name, email, message, company_name } = await req.json();
@@ -16,13 +14,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Send the email using Resend's testing domain
+    if (!process.env.RESEND_API_KEY) {
+      console.warn('[AI Studio] RESEND_API_KEY not configured. Mocking contact message submission.');
+      return NextResponse.json({ success: true, message: 'Message received (demo mode - RESEND_API_KEY not set).' });
+    }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    // Send the email using Resend
     const { error } = await resend.emails.send({
-      // Use onboarding@resend.dev for testing. 
-      // Once you verify smartcurrencytools.com in Resend, change this to contact@smartcurrencytools.com
-      from: 'SmartCurrencyTools <contact@smartcurrencytools.com>',
-      to: ['stoicbonding@gmail.com'], // Sending directly to your email for testing
-      replyTo: email, // If you hit reply, it will go to the user who filled the form
+      from: 'SmartCurrencyTools <onboarding@resend.dev>',
+      to: ['stoicbonding@gmail.com'],
+      replyTo: email,
       subject: `New Contact Form Message from ${name}`,
       html: `
         <h2>New Contact Form Submission</h2>

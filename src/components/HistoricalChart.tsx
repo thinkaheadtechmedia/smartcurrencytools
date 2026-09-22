@@ -3,13 +3,13 @@
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Props {
-  data: any;
+  data: { rates?: Record<string, Record<string, number>> } | null;
 }
 
 export default function HistoricalChart({ data }: Props) {
   if (!data || !data.rates) return <div className="h-full w-full flex items-center justify-center text-slate-400 text-sm">No data available</div>;
 
-  const chartData = Object.entries(data.rates).map(([date, rates]: [string, any]) => ({
+  const chartData = Object.entries(data.rates).map(([date, rates]) => ({
     date,
     rate: Object.values(rates)[0] as number
   }));

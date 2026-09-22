@@ -1,5 +1,5 @@
 import { posts } from '@/lib/blog-data';
-import { Pool } from 'pg';
+import { queryDb, DbBlogPost } from '@/lib/db';
 import Link from 'next/link';
 
 export const metadata = {
@@ -10,14 +10,7 @@ export const metadata = {
 export const revalidate = 3600; // Revalidate every hour to pick up new DB posts
 
 export default async function BlogIndex() {
-  let dbPosts: any[] = [];
-  
-  if (process.env.DATABASE_URL) {
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const { rows } = await pool.query('SELECT * FROM blog_posts ORDER BY date DESC');
-    dbPosts = rows;
-    await pool.end();
-  }
+  const { rows: dbPosts } = await queryDb<DbBlogPost>('SELECT * FROM blog_posts ORDER BY date DESC');
 
   // Combine DB posts and static posts
   const allPosts = [

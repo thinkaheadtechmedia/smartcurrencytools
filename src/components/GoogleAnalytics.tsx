@@ -9,7 +9,7 @@ export default function GoogleAnalytics() {
     // Check if user already accepted cookies
     const storedConsent = localStorage.getItem('cookie-consent');
     if (storedConsent === 'accepted') {
-      setConsent(true);
+      queueMicrotask(() => setConsent(true));
     }
 
     // Listen for the moment the user clicks "Accept" in the banner

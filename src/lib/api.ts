@@ -40,7 +40,7 @@ export async function fetchHistoricalRates(from: string, to: string, days: numbe
       const data = await res.json();
       
       // Format CoinGecko array data to match Frankfurter's object structure
-      const rates: Record<string, any> = {};
+      const rates: Record<string, Record<string, number>> = {};
       data.prices.forEach((item: [number, number]) => {
         const d = new Date(item[0]);
         const dateStr = d.toISOString().split('T')[0];

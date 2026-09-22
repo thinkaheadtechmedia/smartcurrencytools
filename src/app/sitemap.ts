@@ -7,12 +7,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   
   // 1. Static Routes
   const staticRoutes = [
-    '', '/currencies', '/crypto', '/blog', '/about', '/contact', '/rate-alerts'
+    '', '/currencies', '/crypto', '/blog', '/about', '/contact', '/rate-alerts', '/privacy', '/terms', '/disclaimer', '/methodology'
   ].map(r => ({
     url: `${baseUrl}${r}`, 
     lastModified: new Date(), 
     changeFrequency: 'weekly' as const, 
-    priority: r === '' ? 1.0 : 0.8
+    priority: r === '' ? 1.0 : (['/about', '/privacy', '/terms', '/disclaimer', '/methodology'].includes(r) ? 0.7 : 0.8)
   }));
 
   // 2. Individual Currency Pages

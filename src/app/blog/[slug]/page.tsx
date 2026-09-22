@@ -1,5 +1,5 @@
-import { posts } from '@/lib/blog-data';
-import { Pool } from 'pg';
+import { posts, BlogPost } from '@/lib/blog-data';
+import { queryDb, DbBlogPost } from '@/lib/db';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,11 +12,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  let post = posts.find(p => p.slug === slug);
+  let post: BlogPost | undefined = posts.find(p => p.slug === slug);
   
-  if (!post && process.env.DATABASE_URL) {
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const { rows } = await pool.query('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
+  if (!post) {
+    const { rows } = await queryDb<DbBlogPost>('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
     if (rows.length > 0) {
       post = {
         slug: rows[0].slug,
@@ -28,9 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         date: new Date(rows[0].date).toLocaleDateString('en-CA'),
         author: 'SmartCurrencyTools Editorial Team',
         metaDescription: rows[0].excerpt
-      } as any;
+      };
     }
-    await pool.end();
   }
 
   if (!post) return {};
@@ -41,14 +39,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  let post = posts.find(p => p.slug === slug);
+  let post: BlogPost | undefined = posts.find(p => p.slug === slug);
   
   // If not in static file, check DB
-  if (!post && process.env.DATABASE_URL) {
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const { rows } = await pool.query('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
+  if (!post) {
+    const { rows } = await queryDb<DbBlogPost>('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
     if (rows.length > 0) {
       post = {
         slug: rows[0].slug,
@@ -60,9 +57,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         date: new Date(rows[0].date).toLocaleDateString('en-CA'),
         author: 'SmartCurrencyTools Editorial Team',
         metaDescription: rows[0].excerpt
-      } as any;
+      };
     }
-    await pool.end();
   }
 
   if (!post) return notFound();

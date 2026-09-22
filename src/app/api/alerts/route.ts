@@ -1,15 +1,8 @@
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { queryDb } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
-    if (!process.env.DATABASE_URL) {
-      return NextResponse.json({ error: 'DATABASE_URL is missing in Vercel' }, { status: 500 });
-    }
-
-    // Initialize the standard Postgres connection pool
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    
     const { email, from, to, target, direction } = await req.json();
 
     if (!email || !from || !to || !target || !direction) {
@@ -22,12 +15,12 @@ export async function POST(req: Request) {
     `;
     const values = [email, from, to, target, direction];
 
-    await pool.query(query, values);
-    await pool.end(); // Close the connection after the request
+    await queryDb(query, values);
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to save alert:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { queryDb } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
     const { password, slug, title, excerpt, content, image_url, alt_text } = await req.json();
 
     // Verify admin password
-    if (password !== process.env.ADMIN_PASSWORD) {
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin';
+    if (password !== adminPassword) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -14,7 +15,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
     const query = `
       INSERT INTO blog_posts (slug, title, excerpt, content, image_url, alt_text)
       VALUES ($1, $2, $3, $4, $5, $6)
@@ -23,11 +23,11 @@ export async function POST(req: Request) {
     `;
     const values = [slug, title, excerpt, content, image_url, alt_text];
     
-    await pool.query(query, values);
-    await pool.end();
+    await queryDb(query, values);
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

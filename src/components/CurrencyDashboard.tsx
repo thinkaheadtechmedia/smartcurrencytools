@@ -9,7 +9,7 @@ interface DashboardProps {
   initialFrom: string;
   initialTo: string;
   initialRate: number;
-  initialHistorical: any;
+  initialHistorical: { rates?: Record<string, Record<string, number>> } | null;
 }
 
 export default function CurrencyDashboard({ 
